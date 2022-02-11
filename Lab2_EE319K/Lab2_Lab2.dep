@@ -1,0 +1,9 @@
+Dependencies for Project 'Lab2', Target 'Lab2': (DO NOT MODIFY !)
+CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
+F (.\startup.s)(0x519ADEE4)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Lab2-IC:\Users\siddh\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\siddh\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123--pd "__UVISION_VERSION SETA 536" --pd "_RTE_ SETA 1" --pd "TM4C123GH6PM SETA 1" --pd "_RTE_ SETA 1"--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\Lab2.c)(0x6204D532)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab2-IC:\Users\siddh\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\siddh\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\lab2.o --omf_browse .\lab2.crf --depend .\lab2.d)
+I (Lab2.h)(0x6202E7B7)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+F (.\lab2grader.o)(0x61DC93BE)()
+F (.\pll.o)(0x612AE1E2)()
+F (.\uart.o)(0x612AE1E2)()
