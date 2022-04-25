@@ -1,0 +1,509 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;****************** main.s ***************
+    2 00000000         ; Program written by: Jonathan Valvano
+    3 00000000         ; Date Created: 2/14/2017
+    4 00000000         ; Last Modified: 1/10/2022
+    5 00000000         ; You are given a simple embedded system with one input 
+                       and six outputs. 
+    6 00000000         ; This program runs, but you are asked to add minimally 
+                       intrusive
+    7 00000000         ; debugging instruments to verify it is running properly
+                       . 
+    8 00000000         ; The basic function of the system will be to create whi
+                       te noise
+    9 00000000         ; If the input is low, the program outputs random number
+                       s at random times
+   10 00000000         ; If the input is high, the program outputs a constant v
+                       alue at a regular rate
+   11 00000000         ; It uses a pseudo random number, so data will be the sa
+                       me each time
+   12 00000000         ;   Implement debugging instruments which gather data (s
+                       tate and timing)
+   13 00000000         ;   to verify that the system is functioning as expected
+                       .
+   14 00000000         ; System Hardware connections 
+   15 00000000         ;  PD2 is Button input positive logic, add an external b
+                       utton
+   16 00000000         ;  6-bit outputs on PB5-0 (you do not need to add actual
+                        hardware)
+   17 00000000         ; Lab 4 debugging output
+   18 00000000         ;  LED output PF1 PF2 or PF3 on Launchpad used as a hear
+                       tbeat
+   19 00000000         
+   20 00000000         ; Option 1, N = 168, Implement HeartBeat on PF1
+   21 00000000 400FE608 
+                       SYSCTL_RCGCGPIO_R
+                               EQU              0x400FE608
+   22 00000000 400053FC 
+                       GPIO_PORTB_DATA_R
+                               EQU              0x400053FC
+   23 00000000 40005400 
+                       GPIO_PORTB_DIR_R
+                               EQU              0x40005400
+   24 00000000 4000551C 
+                       GPIO_PORTB_DEN_R
+                               EQU              0x4000551C
+   25 00000000 400073FC 
+                       GPIO_PORTD_DATA_R
+                               EQU              0x400073FC
+   26 00000000 40007400 
+                       GPIO_PORTD_DIR_R
+                               EQU              0x40007400
+   27 00000000 4000751C 
+                       GPIO_PORTD_DEN_R
+                               EQU              0x4000751C
+   28 00000000 400253FC 
+                       GPIO_PORTF_DATA_R
+                               EQU              0x400253FC
+   29 00000000 40025400 
+                       GPIO_PORTF_DIR_R
+                               EQU              0x40025400
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   30 00000000 4002551C 
+                       GPIO_PORTF_DEN_R
+                               EQU              0x4002551C
+   31 00000000         ; RAM Area
+   32 00000000                 AREA             DATA, ALIGN=2
+   33 00000000 00 00 00 
+              00       Ran     SPACE            4
+   34 00000004         
+   35 00000004         ; ROM Area
+   36 00000004                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   37 00000000                 IMPORT           TExaS_Init
+   38 00000000                 IMPORT           Debug_Init
+   39 00000000                 IMPORT           Debug_Dump
+   40 00000000                 IMPORT           Debug_ElapsedTime
+   41 00000000                 IMPORT           Debug_Beat
+   42 00000000                 THUMB
+   43 00000000         
+   44 00000000                 ALIGN            4
+   45 00000000                 EXPORT           Start
+   46 00000000         Start
+   47 00000000 B672            CPSID            I           ; disable interrrup
+                                                            ts until initializa
+                                                            tion complete
+   48 00000002 F000 F82F       BL               PB50_Init   ; initialize output
+                                                             on PB5-0
+   49 00000006 F000 F83F       BL               PD2_Init    ; initialize switch
+                                                             input on PD2
+   50 0000000A 492F            LDR              R1,=Ran     ; R1 points to Ran
+   51 0000000C F04F 0003       MOV              R0,#3       ; Initial seed ***D
+                                                            O NOT CHANGE THIS S
+                                                            EED***
+   52 00000010 6008            STR              R0,[R1]     ; Ran=3
+   53 00000012         ; TExaS_Init sets bus clock at 80 MHz, interrupts, ADC1,
+                        TIMER3, TIMER5, and UART0
+   54 00000012         ;***YOU MAY CHANGE THE R0 PARAMETER TO 0,1,2,or 3
+   55 00000012 F04F 0002       MOV              R0,#2       ;0 for TExaS oscill
+                                                            oscope, 1 for PD3-P
+                                                            B50 logic analyzer,
+                                                             2 for Lab4 grader,
+                                                             3 for none
+   56 00000016 F7FF FFFE       BL               TExaS_Init  ; enables interrupt
+                                                            s, prints the pin s
+                                                            elections based on 
+                                                            your EID1 EID2
+   57 0000001A         ;---Your Initialization------------
+   58 0000001A F7FF FFFE       BL               Debug_Init  ; you write this
+   59 0000001E         ;**********************
+   60 0000001E 4D2B            LDR              R5,=GPIO_PORTB_DATA_R
+   61 00000020 4E2B            LDR              R6,=GPIO_PORTD_DATA_R
+   62 00000022         loop
+   63 00000022         ;----- Your HeartBeat------------
+   64 00000022         ;toggle PF1 or PF2 so LED flashes at 1Hz
+   65 00000022 F7FF FFFE       BL               Debug_Beat  ; you write this
+   66 00000026         ;**********************
+   67 00000026 6834            LDR              R4,[R6]     ; current value of 
+                                                            switch
+   68 00000028 F014 0404       ANDS             R4,R4,#0x04 ; select just bit 2
+                                                            
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   69 0000002C D10A            BNE              no          ; skip if pushed
+   70 0000002E         ; switch not pressed
+   71 0000002E F04F 0800       MOV              R8,#0x00    ; bit 6 clear
+   72 00000032 F000 F83E       BL               Random6     ; R0=0 to 0x3F
+   73 00000036 EA4F 1000       LSL              R0,R0,#4
+   74 0000003A F500 4700       ADD              R7,R0,#0x8000 ; R7=0x8000 to 0x
+                                                            83F0 time delay
+   75 0000003E F000 F838       BL               Random6     ; R0=0 to 63
+   76 00000042 E005            B                out
+   77 00000044         ;switch pressed
+   78 00000044 F44F 4700 
+                       no      MOV              R7,#0x8000  ; fixed time
+   79 00000048 F04F 0020       MOV              R0,#32      ; fixed output
+   80 0000004C F04F 0840       MOV              R8,#0x40    ; bit 6 high
+   81 00000050         out
+   82 00000050 F000 F82C       BL               Wait
+   83 00000054 6028            STR              R0,[R5]     ; output to Port B
+   84 00000056         ;----- Your Debug routine------------
+   85 00000056 EA40 0008       ORR              R0,R0,R8    ; 7-bit data
+   86 0000005A F7FF FFFE       BL               Debug_Dump  ; you write this
+   87 0000005E F7FF FFFE       BL               Debug_ElapsedTime 
+                                                            ; you write this
+   88 00000062         ;**********************
+   89 00000062 E7DE            B                loop
+   90 00000064         ;Initialize output interface
+   91 00000064         PB50_Init
+   92 00000064         ; activate clock for Port B
+   93 00000064 491B            LDR              R1, =SYSCTL_RCGCGPIO_R
+   94 00000066 6808            LDR              R0, [R1]
+   95 00000068 F040 0002       ORR              R0, R0, #0x02 ; Clock for B
+   96 0000006C 6008            STR              R0, [R1]
+   97 0000006E BF00            NOP
+   98 00000070 BF00            NOP                          ; allow time to fin
+                                                            ish activating
+   99 00000072         ; set direction register
+  100 00000072 4919            LDR              R1, =GPIO_PORTB_DIR_R
+  101 00000074 6808            LDR              R0, [R1]
+  102 00000076 F040 003F       ORR              R0, R0, #0x3F 
+                                                            ; Output on PB0-PB5
+                                                            
+  103 0000007A 6008            STR              R0, [R1]
+  104 0000007C         ; enable digital port
+  105 0000007C 4917            LDR              R1, =GPIO_PORTB_DEN_R
+  106 0000007E 6808            LDR              R0, [R1]
+  107 00000080 F040 003F       ORR              R0, R0, #0x3F ; enable PB5-0
+  108 00000084 6008            STR              R0, [R1]
+  109 00000086 4770            BX               LR
+  110 00000088         
+  111 00000088         ;Initialize switch interface, PD2
+  112 00000088         PD2_Init
+  113 00000088         ; activate clock for Port D
+  114 00000088 4912            LDR              R1, =SYSCTL_RCGCGPIO_R
+  115 0000008A 6808            LDR              R0, [R1]
+  116 0000008C F040 0008       ORR              R0, R0, #0x08 ; Clock for D
+  117 00000090 6008            STR              R0, [R1]
+  118 00000092 BF00            NOP
+  119 00000094 BF00            NOP                          ; allow time to fin
+                                                            ish activating
+  120 00000096         ; set direction register
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  121 00000096 4912            LDR              R1, =GPIO_PORTD_DIR_R
+  122 00000098 6808            LDR              R0, [R1]
+  123 0000009A F020 0004       BIC              R0, R0, #0x04 ; Input on PD2
+  124 0000009E 6008            STR              R0, [R1]
+  125 000000A0         ; 5) enable digital port
+  126 000000A0 4910            LDR              R1, =GPIO_PORTD_DEN_R
+  127 000000A2 6808            LDR              R0, [R1]
+  128 000000A4 F040 0004       ORR              R0, R0, #0x04 ; enable PD2
+  129 000000A8 6008            STR              R0, [R1]
+  130 000000AA 4770            BX               LR
+  131 000000AC         
+  132 000000AC         ; time delay about 3cycles*R7
+  133 000000AC         Wait
+  134 000000AC 1E7F            SUBS             R7,R7,#1
+  135 000000AE D1FD            BNE              Wait
+  136 000000B0 4770            BX               LR
+  137 000000B2         
+  138 000000B2         
+  139 000000B2         ;------------Random6------------
+  140 000000B2         ; Return R0= random number 0 to 63
+  141 000000B2         ; Linear congruential generator 
+  142 000000B2         ; from Numerical Recipes by Press et al.
+  143 000000B2         Random6
+  144 000000B2 4A05            LDR              R2,=Ran     ; R2 points to Ran
+  145 000000B4 6810            LDR              R0,[R2]     ; R0=Ran
+  146 000000B6 490C            LDR              R1,=1664525
+  147 000000B8 FB00 F001       MUL              R0,R0,R1    ; R0 = 1664525*Ran
+  148 000000BC 490B            LDR              R1,=1013904223
+  149 000000BE 4408            ADD              R0,R1       ; 1664525*Ran+10139
+                                                            04223 
+  150 000000C0 6010            STR              R0,[R2]     ; store Ran
+  151 000000C2 EA4F 6090       LSR              R0,R0,#26   ; returns top 6 bit
+                                                            s
+  152 000000C6 4770            BX               LR
+  153 000000C8         
+  154 000000C8                 ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+  155 000000C8                 END                          ; end of file
+              00000000 
+              400053FC 
+              400073FC 
+              400FE608 
+              40005400 
+              4000551C 
+              40007400 
+              4000751C 
+              0019660D 
+              3C6EF35F 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4 --apcs=interw
+ork --depend=.\main.d -o.\main.o -I.\RTE\_Lab4 -IC:\Users\kylet\AppData\Local\A
+rm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include -IC:\Users\kylet\AppData\Local\Arm\
+Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 --predefine="__EVAL SETA 1" --
+predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" --predefine="
+TM4C123GH6PM SETA 1" --predefine="_RTE_ SETA 1" --list=.\main.lst main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 32 in file main.s
+   Uses
+      None
+Comment: DATA unused
+Ran 00000000
+
+Symbol: Ran
+   Definitions
+      At line 33 in file main.s
+   Uses
+      At line 50 in file main.s
+      At line 144 in file main.s
+
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 36 in file main.s
+   Uses
+      None
+Comment: .text unused
+PB50_Init 00000064
+
+Symbol: PB50_Init
+   Definitions
+      At line 91 in file main.s
+   Uses
+      At line 48 in file main.s
+Comment: PB50_Init used once
+PD2_Init 00000088
+
+Symbol: PD2_Init
+   Definitions
+      At line 112 in file main.s
+   Uses
+      At line 49 in file main.s
+Comment: PD2_Init used once
+Random6 000000B2
+
+Symbol: Random6
+   Definitions
+      At line 143 in file main.s
+   Uses
+      At line 72 in file main.s
+      At line 75 in file main.s
+
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 46 in file main.s
+   Uses
+      At line 45 in file main.s
+Comment: Start used once
+Wait 000000AC
+
+Symbol: Wait
+   Definitions
+      At line 133 in file main.s
+   Uses
+      At line 82 in file main.s
+      At line 135 in file main.s
+
+loop 00000022
+
+Symbol: loop
+   Definitions
+      At line 62 in file main.s
+   Uses
+      At line 89 in file main.s
+Comment: loop used once
+no 00000044
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: no
+   Definitions
+      At line 78 in file main.s
+   Uses
+      At line 69 in file main.s
+Comment: no used once
+out 00000050
+
+Symbol: out
+   Definitions
+      At line 81 in file main.s
+   Uses
+      At line 76 in file main.s
+Comment: out used once
+9 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GPIO_PORTB_DATA_R 400053FC
+
+Symbol: GPIO_PORTB_DATA_R
+   Definitions
+      At line 22 in file main.s
+   Uses
+      At line 60 in file main.s
+Comment: GPIO_PORTB_DATA_R used once
+GPIO_PORTB_DEN_R 4000551C
+
+Symbol: GPIO_PORTB_DEN_R
+   Definitions
+      At line 24 in file main.s
+   Uses
+      At line 105 in file main.s
+Comment: GPIO_PORTB_DEN_R used once
+GPIO_PORTB_DIR_R 40005400
+
+Symbol: GPIO_PORTB_DIR_R
+   Definitions
+      At line 23 in file main.s
+   Uses
+      At line 100 in file main.s
+Comment: GPIO_PORTB_DIR_R used once
+GPIO_PORTD_DATA_R 400073FC
+
+Symbol: GPIO_PORTD_DATA_R
+   Definitions
+      At line 25 in file main.s
+   Uses
+      At line 61 in file main.s
+Comment: GPIO_PORTD_DATA_R used once
+GPIO_PORTD_DEN_R 4000751C
+
+Symbol: GPIO_PORTD_DEN_R
+   Definitions
+      At line 27 in file main.s
+   Uses
+      At line 126 in file main.s
+Comment: GPIO_PORTD_DEN_R used once
+GPIO_PORTD_DIR_R 40007400
+
+Symbol: GPIO_PORTD_DIR_R
+   Definitions
+      At line 26 in file main.s
+   Uses
+      At line 121 in file main.s
+Comment: GPIO_PORTD_DIR_R used once
+GPIO_PORTF_DATA_R 400253FC
+
+Symbol: GPIO_PORTF_DATA_R
+   Definitions
+      At line 28 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTF_DATA_R unused
+GPIO_PORTF_DEN_R 4002551C
+
+Symbol: GPIO_PORTF_DEN_R
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 30 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTF_DEN_R unused
+GPIO_PORTF_DIR_R 40025400
+
+Symbol: GPIO_PORTF_DIR_R
+   Definitions
+      At line 29 in file main.s
+   Uses
+      None
+Comment: GPIO_PORTF_DIR_R unused
+SYSCTL_RCGCGPIO_R 400FE608
+
+Symbol: SYSCTL_RCGCGPIO_R
+   Definitions
+      At line 21 in file main.s
+   Uses
+      At line 93 in file main.s
+      At line 114 in file main.s
+
+10 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+Debug_Beat 00000000
+
+Symbol: Debug_Beat
+   Definitions
+      At line 41 in file main.s
+   Uses
+      At line 65 in file main.s
+Comment: Debug_Beat used once
+Debug_Dump 00000000
+
+Symbol: Debug_Dump
+   Definitions
+      At line 39 in file main.s
+   Uses
+      At line 86 in file main.s
+Comment: Debug_Dump used once
+Debug_ElapsedTime 00000000
+
+Symbol: Debug_ElapsedTime
+   Definitions
+      At line 40 in file main.s
+   Uses
+      At line 87 in file main.s
+Comment: Debug_ElapsedTime used once
+Debug_Init 00000000
+
+Symbol: Debug_Init
+   Definitions
+      At line 38 in file main.s
+   Uses
+      At line 58 in file main.s
+Comment: Debug_Init used once
+TExaS_Init 00000000
+
+Symbol: TExaS_Init
+   Definitions
+      At line 37 in file main.s
+   Uses
+      At line 56 in file main.s
+Comment: TExaS_Init used once
+5 symbols
+362 symbols in table

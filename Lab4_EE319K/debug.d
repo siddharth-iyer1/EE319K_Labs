@@ -1,0 +1,1 @@
+.\debug.o: Debug.s

@@ -1,0 +1,717 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;****************** Lab3.s ***************
+    2 00000000         ; Program written by: Kyle Le & Siddarth Iyer
+    3 00000000         ; Date Created: 2/4/2017
+    4 00000000         ; Last Modified: 2/12/2022
+    5 00000000         ; Brief description of the program
+    6 00000000         ;   The LED toggles at 2 Hz and a varying duty-cycle
+    7 00000000         ; Hardware connections (External: Two buttons and one LE
+                       D)
+    8 00000000         ;  Change is Button input  (1 means pressed, 0 means not
+                        pressed)
+    9 00000000         ;  Breathe is Button input  (1 means pressed, 0 means no
+                       t pressed)
+   10 00000000         ;  LED is an output (1 activates external LED)
+   11 00000000         ; Overall functionality of this system is to operate lik
+                       e this
+   12 00000000         ;   1) Make LED an output and make Change and Breathe in
+                       puts.
+   13 00000000         ;   2) The system starts with the the LED toggling at 2H
+                       z,
+   14 00000000         ;      which is 2 times per second with a duty-cycle of 
+                       30%.
+   15 00000000         ;      Therefore, the LED is ON for 150ms and off for 35
+                       0 ms.
+   16 00000000         ;   3) When the Change button is pressed-and-released in
+                       crease 
+   17 00000000         ;      the duty cycle by 20% (modulo 100%). Therefore fo
+                       r each
+   18 00000000         ;      press-and-release the duty cycle changes from 30%
+                        to 70% to 70%
+   19 00000000         ;      to 90% to 10% to 30% so on
+   20 00000000         ;   4) Implement a "breathing LED" when Breathe Switch i
+                       s pressed:
+   21 00000000         ; PortE device registers
+   22 00000000 400243FC 
+                       GPIO_PORTE_DATA_R
+                               EQU              0x400243FC
+   23 00000000 40024400 
+                       GPIO_PORTE_DIR_R
+                               EQU              0x40024400
+   24 00000000 4002451C 
+                       GPIO_PORTE_DEN_R
+                               EQU              0x4002451C
+   25 00000000 400FE608 
+                       SYSCTL_RCGCGPIO_R
+                               EQU              0x400FE608
+   26 00000000         
+   27 00000000                 IMPORT           TExaS_Init
+   28 00000000                 THUMB
+   29 00000000                 AREA             DATA, ALIGN=2
+   30 00000000         ;global variables go here
+   31 00000000         
+   32 00000000 00 00 00 
+              00       TIMEON  SPACE            4
+   33 00000004 00 00 00 
+              00       TIMEOFF SPACE            4
+   34 00000008 001E8480 
+                       TIMEINC EQU              2000000
+   35 00000008 00895440 
+                       TIMEMAX EQU              9000000
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   36 00000008 00 00 00 
+              00       BREATHEON
+                               SPACE            4
+   37 0000000C 00 00 00 
+              00       BREATHEOFF
+                               SPACE            4
+   38 00000010 00002710 
+                       BREATHEINC
+                               EQU              10000
+   39 00000010         
+   40 00000010         
+   41 00000010                 EXPORT           TIMEON
+   42 00000010                 EXPORT           TIMEOFF
+   43 00000010                 EXPORT           TIMEINC
+   44 00000010                 EXPORT           TIMEMAX
+   45 00000010         
+   46 00000010         
+   47 00000010                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   48 00000000                 THUMB
+   49 00000000                 EXPORT           EID1
+   50 00000000 73 73 69 
+              33 32 35 
+              00       EID1    DCB              "ssi325",0  ;replace ABC123 wit
+                                                            h your EID
+   51 00000007                 EXPORT           EID2
+   52 00000007 6B 6C 33 
+              35 32 39 
+              38 00    EID2    DCB              "kl35298",0 ;replace ABC123 wit
+                                                            h your EID
+   53 0000000F         
+   54 0000000F         
+   55 0000000F 00              ALIGN            4
+   56 00000010         
+   57 00000010                 EXPORT           Start
+   58 00000010         ; Change - PE1
+   59 00000010         ; Breathe - PE2
+   60 00000010         ; LED - PE4
+   61 00000010         
+   62 00000010         Start
+   63 00000010         ; TExaS_Init sets bus clock at 80 MHz, interrupts, ADC1,
+                        TIMER3, TIMER5, and UART0
+   64 00000010 F04F 0002       MOV              R0,#2       ;0 for TExaS oscill
+                                                            oscope, 1 for PORTE
+                                                             logic analyzer, 2 
+                                                            for Lab3 grader, 3 
+                                                            for none
+   65 00000014 F7FF FFFE       BL               TExaS_Init  ;enables interrupts
+                                                            , prints the pin se
+                                                            lections based on E
+                                                            ID1 EID2
+   66 00000018         ; Your Initialization goes here
+   67 00000018 484C            LDR              R0 ,= SYSCTL_RCGCGPIO_R
+   68 0000001A 6801            LDR              R1, [R0]
+   69 0000001C F041 0110       ORR              R1, #0x10
+   70 00000020 6001            STR              R1, [R0]
+   71 00000022 BF00            NOP
+   72 00000024 BF00            NOP
+   73 00000026         
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   74 00000026 484A            LDR              R0,= GPIO_PORTE_DIR_R
+   75 00000028 6801            LDR              R1, [R0]
+   76 0000002A F041 0110       ORR              R1, #0x10
+   77 0000002E 6001            STR              R1, [R0]
+   78 00000030         
+   79 00000030 4848            LDR              R0,= GPIO_PORTE_DEN_R
+   80 00000032 6801            LDR              R1, [R0]
+   81 00000034 F041 0116       ORR              R1, #0x16
+   82 00000038 6001            STR              R1, [R0]
+   83 0000003A         
+   84 0000003A 4947            LDR              R1,= 3000000 ; Initializes to 3
+                                                            0% duty cycle
+   85 0000003C 4847            LDR              R0,= TIMEON
+   86 0000003E 6001            STR              R1, [R0]
+   87 00000040         
+   88 00000040 4947            LDR              R1,= 7000000
+   89 00000042 4848            LDR              R0,= TIMEOFF
+   90 00000044 6001            STR              R1, [R0]
+   91 00000046         
+   92 00000046 F8DF 9120       LDR              R9,= 50000000
+   93 0000004A         loop
+   94 0000004A         ; main engine goes here
+   95 0000004A 4848            LDR              R0,= GPIO_PORTE_DATA_R
+   96 0000004C 6807            LDR              R7, [R0]
+   97 0000004E F007 0802       AND              R8, R7, #0x02
+   98 00000052 F1B8 0F02       CMP              R8, #0x02   ; Checks if Bit 1 i
+                                                            s set (PE1/Change s
+                                                            witch)
+   99 00000056 D014            BEQ              change
+  100 00000058         return
+  101 00000058 F007 0804       AND              R8, R7, #0x04
+  102 0000005C F1B8 0F04       CMP              R8, #0x04   ; Checks if Bit 2 i
+                                                            s set for Breathe B
+                                                            utton
+  103 00000060 D02C            BEQ              breathe
+  104 00000062         
+  105 00000062         return1
+  106 00000062 4A3E            LDR              R2,= TIMEON
+  107 00000064 6813            LDR              R3, [R2]
+  108 00000066 4C3F            LDR              R4,= TIMEOFF
+  109 00000068 6825            LDR              R5, [R4]
+  110 0000006A         
+  111 0000006A 6801            LDR              R1, [R0]    ; Turns on LED
+  112 0000006C F041 0110       ORR              R1, #0x10
+  113 00000070 6001            STR              R1, [R0]
+  114 00000072 F000 F81D       BL               delay1
+  115 00000076         
+  116 00000076 F081 0110       EOR              R1, #0x10   ; Turns off LED
+  117 0000007A 6001            STR              R1, [R0]
+  118 0000007C F000 F81B       BL               delay2
+  119 00000080         
+  120 00000080 E7E3            B                loop
+  121 00000082         
+  122 00000082         change
+  123 00000082 6807            LDR              R7, [R0]
+  124 00000084 F007 0702       AND              R7, #0x02
+  125 00000088 2F02            CMP              R7, #0x02   ; Checks if Button 
+                                                            has been released, 
+                                                            if it hasn't keep l
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+                                                            ooping
+  126 0000008A D0FA            BEQ              change
+  127 0000008C 6813            LDR              R3, [R2]    ; Loads in amount o
+                                                            f time LED is on
+  128 0000008E 6825            LDR              R5, [R4]    ; Loads in amount o
+                                                            f time LED is off
+  129 00000090 4E37            LDR              R6,= TIMEINC
+  130 00000092 F8DF 80E0       LDR              R8,= TIMEMAX
+  131 00000096 4543            CMP              R3, R8      ; Checks if the dut
+                                                            y cycle is at 90%
+  132 00000098 D005            BEQ              backto1     ; If so, branch.
+  133 0000009A 4433            ADD              R3, R6      ; Increments time o
+                                                            n
+  134 0000009C 6013            STR              R3, [R2]
+  135 0000009E EBA5 0506       SUB              R5, R6      ; Decrements Time o
+                                                            ff
+  136 000000A2 6025            STR              R5, [R4]
+  137 000000A4 E7D8    ret     B                return
+  138 000000A6         
+  139 000000A6         backto1
+  140 000000A6 4934            LDR              R1,= 1000000 ; Puts Time On bac
+                                                            k to a Duty Cycle o
+                                                            f 10%
+  141 000000A8 6011            STR              R1, [R2]
+  142 000000AA 4932            LDR              R1 ,= 9000000 ; Puts time Off t
+                                                            o duty cylce of 10%
+                                                            
+  143 000000AC 6021            STR              R1, [R4]
+  144 000000AE E7F9            B                ret
+  145 000000B0         
+  146 000000B0         delay1
+  147 000000B0 3B01            SUBS             R3, #1      ; Subtracts from R3
+                                                            , contains Breathe 
+                                                            Time On if taken fr
+                                                            om BReathe, contain
+                                                            s Time On if taken 
+                                                            from main loop
+  148 000000B2 D1FD            BNE              delay1
+  149 000000B4 4770            BX               LR
+  150 000000B6         
+  151 000000B6         delay2
+  152 000000B6 3D01            SUBS             R5, #1      ; Subtracts from R5
+                                                            , contains Breathe 
+                                                            Time off if taken f
+                                                            rom Breathe, contai
+                                                            ns Time off if take
+                                                            n from main loop
+  153 000000B8 D1FD            BNE              delay2
+  154 000000BA 4770            BX               LR
+  155 000000BC         
+  156 000000BC         
+  157 000000BC         
+  158 000000BC         breathe
+  159 000000BC 4A2F            LDR              R2 ,= BREATHEON ; Breathe Butto
+                                                            n initialization va
+                                                            lues
+  160 000000BE F242 7110       LDR              R1 ,= 10000 ; Time on Value
+  161 000000C2 6011            STR              R1, [R2]    ; R2 contains addre
+                                                            ss of BREATHEON
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  162 000000C4 4C2E            LDR              R4 ,= BREATHEOFF
+  163 000000C6 492F            LDR              R1 ,= 90000 ; Time off value
+  164 000000C8 6021            STR              R1, [R4]    ; R4 contains addre
+                                                            ss of BREATHEOFF
+  165 000000CA F242 7810       LDR              R8 ,= BREATHEINC 
+                                                            ; Increment value
+  166 000000CE F04F 0A00       MOV              R10, #0x00  ; R10 determines if
+                                                             we are breathing u
+                                                            p or we are breathi
+                                                            ng down
+  167 000000D2         
+  168 000000D2         resetTimer
+  169 000000D2 F04F 090A       LDR              R9,= 10
+  170 000000D6         
+  171 000000D6         breatheLoop
+  172 000000D6 6807            LDR              R7, [R0]    ; Loads in Data Reg
+                                                            ister
+  173 000000D8 F007 0704       AND              R7, #0x04
+  174 000000DC 2F04            CMP              R7, #0x04   ; Checks if Breathe
+                                                             Button PE2 has bee
+                                                            n released, if it h
+                                                            as, return back
+  175 000000DE D1C0            BNE              return1
+  176 000000E0         
+  177 000000E0 6821            LDR              R1, [R4]    ; Loads in Breathe 
+                                                            Time Off, if it is 
+                                                            0 then that means d
+                                                            uty cycle is at 100
+                                                            %
+  178 000000E2 2900            CMP              R1, #0x00   ; Checks if duty cy
+                                                            cle is at 100%
+  179 000000E4 D021            BEQ              breatheDown ; Reverses the brea
+                                                            thing
+  180 000000E6         
+  181 000000E6 6811            LDR              R1, [R2]    ; Loads in Breathe 
+                                                            Time Off, it is 0 t
+                                                            hat means duty cycl
+                                                            e is at 0%
+  182 000000E8 2900            CMP              R1, #0x00
+  183 000000EA D014            BEQ              breatheUp   ;
+  184 000000EC         
+  185 000000EC 6813            LDR              R3, [R2]    ; Puts Breathe On i
+                                                            nto R3
+  186 000000EE 6825            LDR              R5, [R4]    ; Puts Breathe Off 
+                                                            into R5
+  187 000000F0         
+  188 000000F0 6801            LDR              R1, [R0]
+  189 000000F2 F041 0110       ORR              R1, #0x10   ; Turn on LED
+  190 000000F6 6001            STR              R1, [R0]
+  191 000000F8 F7FF FFDA       BL               delay1
+  192 000000FC         
+  193 000000FC F081 0110       EOR              R1, #0x10   ; Toggle off LED
+  194 00000100 6001            STR              R1, [R0]
+  195 00000102 F7FF FFD8       BL               delay2
+  196 00000106         
+  197 00000106 F1A9 0901       SUB              R9, R9, #0x01 ; Time for how lo
+                                                            ng each duty cycle 
+                                                            runs
+  198 0000010A F1B9 0F00       CMP              R9, #0x00
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  199 0000010E D1E2            BNE              breatheLoop
+  200 00000110         
+  201 00000110 F1BA 0F01       CMP              R10, #0x01
+  202 00000114 D009            BEQ              breatheDown
+  203 00000116         
+  204 00000116         breatheUp
+  205 00000116 F000 F815       BL               toggleBreatheUp
+  206 0000011A 6811            LDR              R1, [R2]    ; Loads in Breathe 
+                                                            Time On
+  207 0000011C 4441            ADD              R1, R8      ; Increments Breath
+                                                            e Time On
+  208 0000011E 6011            STR              R1, [R2]
+  209 00000120 6821            LDR              R1, [R4]    ; Loads in Breathe 
+                                                            Time Off
+  210 00000122 EBA1 0108       SUB              R1, R8      ; Decrements Breath
+                                                            e time off
+  211 00000126 6021            STR              R1, [R4]
+  212 00000128 E7D3            B                resetTimer
+  213 0000012A         
+  214 0000012A         breatheDown
+  215 0000012A F000 F808       BL               toggleBreatheDown
+  216 0000012E 6811            LDR              R1, [R2]    ; Loads in Breathe 
+                                                            Time On
+  217 00000130 EBA1 0108       SUB              R1, R8      ; Decrements Breath
+                                                            e Time On
+  218 00000134 6011            STR              R1, [R2]
+  219 00000136 6821            LDR              R1, [R4]    ; Loads in Breathe 
+                                                            Time Off
+  220 00000138 4441            ADD              R1, R8      ; Increments Breath
+                                                            e time off
+  221 0000013A 6021            STR              R1, [R4]
+  222 0000013C E7C9            B                resetTimer
+  223 0000013E         
+  224 0000013E         toggleBreatheDown
+  225 0000013E F04A 0A01       ORR              R10, #0x01
+  226 00000142 4770            BX               LR
+  227 00000144         
+  228 00000144         toggleBreatheUp
+  229 00000144 F04F 0A00       MOV              R10, #0x00
+  230 00000148 4770            BX               LR
+  231 0000014A         
+  232 0000014A         
+  233 0000014A         
+  234 0000014A         
+  235 0000014A         
+  236 0000014A 00 00           ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+  237 0000014C                 END                          ; end of file
+              400FE608 
+              40024400 
+              4002451C 
+              002DC6C0 
+              00000000 
+              006ACFC0 
+              00000000 
+              02FAF080 
+              400243FC 
+              001E8480 
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+              00895440 
+              000F4240 
+              00000000 
+              00000000 
+              00015F90 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4 --apcs=interw
+ork --depend=.\lab3.d -o.\lab3.o -I.\RTE\_Lab3 -IC:\Users\kylet\AppData\Local\A
+rm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include -IC:\Users\kylet\AppData\Local\Arm\
+Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 --predefine="__EVAL SETA 1" --
+predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" --predefine="
+TM4C123GH6PM SETA 1" --predefine="_RTE_ SETA 1" --list=.\lab3.lst Lab3.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+BREATHEOFF 0000000C
+
+Symbol: BREATHEOFF
+   Definitions
+      At line 37 in file Lab3.s
+   Uses
+      At line 162 in file Lab3.s
+Comment: BREATHEOFF used once
+BREATHEON 00000008
+
+Symbol: BREATHEON
+   Definitions
+      At line 36 in file Lab3.s
+   Uses
+      At line 159 in file Lab3.s
+Comment: BREATHEON used once
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 29 in file Lab3.s
+   Uses
+      None
+Comment: DATA unused
+TIMEOFF 00000004
+
+Symbol: TIMEOFF
+   Definitions
+      At line 33 in file Lab3.s
+   Uses
+      At line 42 in file Lab3.s
+      At line 89 in file Lab3.s
+      At line 108 in file Lab3.s
+
+TIMEON 00000000
+
+Symbol: TIMEON
+   Definitions
+      At line 32 in file Lab3.s
+   Uses
+      At line 41 in file Lab3.s
+      At line 85 in file Lab3.s
+      At line 106 in file Lab3.s
+
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 47 in file Lab3.s
+   Uses
+      None
+Comment: .text unused
+EID1 00000000
+
+Symbol: EID1
+   Definitions
+      At line 50 in file Lab3.s
+   Uses
+      At line 49 in file Lab3.s
+Comment: EID1 used once
+EID2 00000007
+
+Symbol: EID2
+   Definitions
+      At line 52 in file Lab3.s
+   Uses
+      At line 51 in file Lab3.s
+Comment: EID2 used once
+Start 00000010
+
+Symbol: Start
+   Definitions
+      At line 62 in file Lab3.s
+   Uses
+      At line 57 in file Lab3.s
+Comment: Start used once
+backto1 000000A6
+
+Symbol: backto1
+   Definitions
+      At line 139 in file Lab3.s
+   Uses
+      At line 132 in file Lab3.s
+Comment: backto1 used once
+breathe 000000BC
+
+Symbol: breathe
+   Definitions
+      At line 158 in file Lab3.s
+   Uses
+      At line 103 in file Lab3.s
+Comment: breathe used once
+breatheDown 0000012A
+
+Symbol: breatheDown
+   Definitions
+      At line 214 in file Lab3.s
+   Uses
+      At line 179 in file Lab3.s
+      At line 202 in file Lab3.s
+
+breatheLoop 000000D6
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: breatheLoop
+   Definitions
+      At line 171 in file Lab3.s
+   Uses
+      At line 199 in file Lab3.s
+Comment: breatheLoop used once
+breatheUp 00000116
+
+Symbol: breatheUp
+   Definitions
+      At line 204 in file Lab3.s
+   Uses
+      At line 183 in file Lab3.s
+Comment: breatheUp used once
+change 00000082
+
+Symbol: change
+   Definitions
+      At line 122 in file Lab3.s
+   Uses
+      At line 99 in file Lab3.s
+      At line 126 in file Lab3.s
+
+delay1 000000B0
+
+Symbol: delay1
+   Definitions
+      At line 146 in file Lab3.s
+   Uses
+      At line 114 in file Lab3.s
+      At line 148 in file Lab3.s
+      At line 191 in file Lab3.s
+
+delay2 000000B6
+
+Symbol: delay2
+   Definitions
+      At line 151 in file Lab3.s
+   Uses
+      At line 118 in file Lab3.s
+      At line 153 in file Lab3.s
+      At line 195 in file Lab3.s
+
+loop 0000004A
+
+Symbol: loop
+   Definitions
+      At line 93 in file Lab3.s
+   Uses
+      At line 120 in file Lab3.s
+Comment: loop used once
+resetTimer 000000D2
+
+Symbol: resetTimer
+   Definitions
+      At line 168 in file Lab3.s
+   Uses
+      At line 212 in file Lab3.s
+      At line 222 in file Lab3.s
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+
+ret 000000A4
+
+Symbol: ret
+   Definitions
+      At line 137 in file Lab3.s
+   Uses
+      At line 144 in file Lab3.s
+Comment: ret used once
+return 00000058
+
+Symbol: return
+   Definitions
+      At line 100 in file Lab3.s
+   Uses
+      At line 137 in file Lab3.s
+Comment: return used once
+return1 00000062
+
+Symbol: return1
+   Definitions
+      At line 105 in file Lab3.s
+   Uses
+      At line 175 in file Lab3.s
+Comment: return1 used once
+toggleBreatheDown 0000013E
+
+Symbol: toggleBreatheDown
+   Definitions
+      At line 224 in file Lab3.s
+   Uses
+      At line 215 in file Lab3.s
+Comment: toggleBreatheDown used once
+toggleBreatheUp 00000144
+
+Symbol: toggleBreatheUp
+   Definitions
+      At line 228 in file Lab3.s
+   Uses
+      At line 205 in file Lab3.s
+Comment: toggleBreatheUp used once
+19 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+BREATHEINC 00002710
+
+Symbol: BREATHEINC
+   Definitions
+      At line 38 in file Lab3.s
+   Uses
+      At line 165 in file Lab3.s
+Comment: BREATHEINC used once
+GPIO_PORTE_DATA_R 400243FC
+
+Symbol: GPIO_PORTE_DATA_R
+   Definitions
+      At line 22 in file Lab3.s
+   Uses
+      At line 95 in file Lab3.s
+Comment: GPIO_PORTE_DATA_R used once
+GPIO_PORTE_DEN_R 4002451C
+
+Symbol: GPIO_PORTE_DEN_R
+   Definitions
+      At line 24 in file Lab3.s
+   Uses
+      At line 79 in file Lab3.s
+Comment: GPIO_PORTE_DEN_R used once
+GPIO_PORTE_DIR_R 40024400
+
+Symbol: GPIO_PORTE_DIR_R
+   Definitions
+      At line 23 in file Lab3.s
+   Uses
+      At line 74 in file Lab3.s
+Comment: GPIO_PORTE_DIR_R used once
+SYSCTL_RCGCGPIO_R 400FE608
+
+Symbol: SYSCTL_RCGCGPIO_R
+   Definitions
+      At line 25 in file Lab3.s
+   Uses
+      At line 67 in file Lab3.s
+Comment: SYSCTL_RCGCGPIO_R used once
+TIMEINC 001E8480
+
+Symbol: TIMEINC
+   Definitions
+      At line 34 in file Lab3.s
+   Uses
+      At line 43 in file Lab3.s
+      At line 129 in file Lab3.s
+
+TIMEMAX 00895440
+
+Symbol: TIMEMAX
+   Definitions
+      At line 35 in file Lab3.s
+   Uses
+      At line 44 in file Lab3.s
+      At line 130 in file Lab3.s
+
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+TExaS_Init 00000000
+
+Symbol: TExaS_Init
+   Definitions
+      At line 27 in file Lab3.s
+   Uses
+      At line 65 in file Lab3.s
+Comment: TExaS_Init used once
+1 symbol
+368 symbols in table

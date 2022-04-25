@@ -1,0 +1,15 @@
+Dependencies for Project 'Lab5', Target 'Lab5': (DO NOT MODIFY !)
+CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
+F (.\startup.s)(0x519961BE)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_Lab5-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123--pd "__UVISION_VERSION SETA 536" --pd "_RTE_ SETA 1" --pd "TM4C123GH6PM SETA 1" --pd "_RTE_ SETA 1"--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\Lab5.c)(0x622A4C50)(--c99 -c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\..-I.\RTE\_Lab5-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\lab5.o --omf_browse .\lab5.crf --depend .\lab5.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+I (SysTick.h)(0x61DDBFBA)
+I (Lab5grader.h)(0x61DDBF36)
+I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
+F (.\SysTick.c)(0x62294E13)(--c99 -c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\..-I.\RTE\_Lab5-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
+F (.\pll.o)(0x612AD9FA)()
+F (.\uart.o)(0x6138D8E6)()
+F (.\timer3a.o)(0x612AD9FA)()
+F (.\lab5grader.o)(0x61DDBC2A)()
