@@ -1,0 +1,29 @@
+Dependencies for Project 'Lab8', Target 'Lab8': (DO NOT MODIFY !)
+CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
+F (.\startup.s)(0x56D7222A)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123--pd "__UVISION_VERSION SETA 536" --pd "_RTE_ SETA 1" --pd "TM4C123GH6PM SETA 1" --pd "_RTE_ SETA 1"--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\LCD.s)(0x6255DA65)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123--pd "__UVISION_VERSION SETA 536" --pd "_RTE_ SETA 1" --pd "TM4C123GH6PM SETA 1" --pd "_RTE_ SETA 1"--list .\lcd.lst --xref -o .\lcd.o --depend .\lcd.d)
+F (.\Print.s)(0x6257A5D8)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123--pd "__UVISION_VERSION SETA 536" --pd "_RTE_ SETA 1" --pd "TM4C123GH6PM SETA 1" --pd "_RTE_ SETA 1"--list .\print.lst --xref -o .\print.o --depend .\print.d)
+F (.\ADC.c)(0x62570E71)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .. -I ..\..\.. --C99-I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
+F (.\Lab8.c)(0x62586496)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .. -I ..\..\.. --C99-I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\lab8.o --omf_browse .\lab8.crf --depend .\lab8.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+I (ST7735.h)(0x61DDF872)
+I (TExaS.h)(0x61DF0696)
+I (ADC.h)(0x61DF0696)
+I (print.h)(0x5ABBFC5C)
+I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
+F (.\ST7735.c)(0x61DDF872)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .. -I ..\..\.. --C99-I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\st7735.o --omf_browse .\st7735.crf --depend .\st7735.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x6025E854)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+I (ST7735.h)(0x61DDF872)
+I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
+F (.\TExaS.c)(0x618165A2)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .. -I ..\..\.. --C99-I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\texas.o --omf_browse .\texas.crf --depend .\texas.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
+I (TExaS.h)(0x61DF0696)
+I (PLL.h)(0x55463040)
+F (.\PLL.c)(0x5545A0E2)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .. -I ..\..\.. --C99-I.\RTE\_Lab8-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
+I (PLL.h)(0x55463040)
+I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
