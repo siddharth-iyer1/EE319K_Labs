@@ -101,8 +101,8 @@
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
         <bEvRecOn>1</bEvRecOn>
-        <bSchkAxf>1</bSchkAxf>
-        <bTchkAxf>1</bTchkAxf>
+        <bSchkAxf>0</bSchkAxf>
+        <bTchkAxf>0</bTchkAxf>
         <nTsel>12</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
@@ -215,7 +215,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGDARM</Key>
-          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=-1,-1,-1,-1,0)(9106=-1,-1,-1,-1,0)(9104=895,403,1301,684,1)(9107=971,560,1434,841,1)(9109=455,164,878,445,0)(9102=960,429,1366,713,1)</Name>
+          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=-1,-1,-1,-1,0)(9106=-1,-1,-1,-1,0)(9104=914,379,1320,660,1)(9107=903,237,1366,518,0)(9109=455,164,878,445,0)(9102=960,429,1366,713,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -243,19 +243,22 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>GPIO_PORTF_DATA_R</ItemText>
+          <ItemText>NVIC_ST_CURRENT_R</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>data,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>data</ItemText>
+          <ItemText>NVIC_ST_RELOAD_R</ItemText>
         </Ww>
       </WatchWindow1>
+      <MemoryWindow1>
+        <Mm>
+          <WinNumber>1</WinNumber>
+          <SubType>0</SubType>
+          <ItemText>0x400253FC</ItemText>
+          <AccSizeX>0</AccSizeX>
+        </Mm>
+      </MemoryWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -302,7 +305,7 @@
         <Wi>
           <IntNumber>0</IntNumber>
           <FirstString>`DACOUT</FirstString>
-          <SecondString>FF00000000000020ADD1AA3F0000004066660A40000000000000000000000000000000004441434F555400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000000000000000F03F13000000000000000000000000000000000000002E190000</SecondString>
+          <SecondString>FF00000000000000000000006666666666660A40000000000000000000000000000000004441434F555400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000700000001000000000000000000F03F1200000000000000000000000000000000000000A01B0000</SecondString>
         </Wi>
       </LogicAnalyzers>
     </TargetOption>

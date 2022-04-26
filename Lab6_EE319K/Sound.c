@@ -25,7 +25,7 @@ Key0=277.2, Key1=349.2, Key2=415.3, Key3=466.2 Hz
 #define DAC (*((volatile uint32_t *)0x400050FC)) // PB5-0
 	
 const uint8_t wave [64] = {
-	32,35,38,41,44,47,49,52,54,56,58,59,61,62,62,63,63,63,62,62,
+32,35,38,41,44,47,49,52,54,56,58,59,61,62,62,63,63,63,62,62,
 	61,59,58,56,54,52,49,47,44,41,38,35,32,29,26,23,20,17,15,12,
 	10,8,6,5,3,2,2,1,1,1,2,2,3,5,6,8,10,12,15,17,20,23,26,29};
 
@@ -53,10 +53,11 @@ void Sound_Init(void){
 //         if period equals zero, disable sound output
 // Output: none
 void Sound_Start(uint32_t period){
-	
+	if(period==0){
+		void Sound_Off(); //forward declaration
+	}
 	NVIC_ST_CTRL_R = 0x07; // enable systick
 	NVIC_ST_RELOAD_R = period;
-	
 }
 
 
@@ -64,8 +65,7 @@ void Sound_Start(uint32_t period){
 // stop outputing to DAC
 // Output: none
 void Sound_Off(void){
-	DAC = 0;
-	GPIO_PORTF_DATA_R = 0x02;
+	DAC = 0x00;
 	NVIC_ST_CTRL_R = 0; // stops interrupts so no output to DAC (?)
 }
 
@@ -98,8 +98,7 @@ const uint8_t *Sound_GetVoice(void){
 // Executed every 12.5ns*(period)
 void SysTick_Handler(void){
 	static uint8_t i = 0;
-	DAC_Out(wave[i]);
-	GPIO_PORTF_DATA_R = 0x0E;
+	DAC = wave[i];
 	i = (i+1)&0x3F;
 }
 

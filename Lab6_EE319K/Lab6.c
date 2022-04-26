@@ -37,19 +37,19 @@ Key0=277.2, Key1=349.2, Key2=415.3, Key3=466.2 Hz
 
 */
 const uint32_t Inputs[16]={0,1,7,8,15,16,17,18,31,32,33,47,48,49,62,63};
-//int voltmetermain(void){ uint32_t i;  
-//  DisableInterrupts();
-//  TExaS_Init(REALBOARDGRADER);    
-//  LaunchPad_Init();
-//  DAC_Init(); // your lab 6 solution
-//  i = 0;
-//  EnableInterrupts();
-//  while(1){                
-//    Testdata = Inputs[i];
-//    DAC_Out(Testdata); // your lab 6 solution
-//    i=(i+1)&0x0F;  // <---put a breakpoint here
-//  }
-//}
+int voltmetermain(void){ uint32_t i;  
+  DisableInterrupts();
+  TExaS_Init(SCOPE);    
+  LaunchPad_Init();
+  DAC_Init(); // your lab 6 solution
+  i = 0;
+  EnableInterrupts();
+  while(1){                
+    Testdata = Inputs[i];
+    DAC_Out(Testdata); // your lab 6 solution
+    i=(i+1)&0x0F;  // <---put a breakpoint here
+  }
+}
 
 // DelayMs
 //  - busy wait n milliseconds
@@ -66,60 +66,38 @@ void static DelayMs(uint32_t n){
   }
 }
 
-// lab video Lab6_static. Program 6.2
-// A simple program that outputs sixteen DAC values. 
-// Use this main if you do not have a voltmeter. 
-// Connect PD3 to your DACOUT and observe the voltage using TExaSdisplay in scope mode.
-int staticmain(void){  
-  uint32_t last,now,i;  
-  DisableInterrupts();
-  TExaS_Init(SCOPE);    // bus clock at 80 MHz
-  LaunchPad_Init();
-  DAC_Init(); // your lab 6 solution
-  i = 0;
-  EnableInterrupts();
-  last = LaunchPad_Input();
-  while(1){                
-    now = LaunchPad_Input();
-    if((last != now)&&now){
-      Testdata = Inputs[i];
-      DAC_Out(Testdata); // your lab 6 solution
-      i=(i+1)&0x0F;
-    }
-    last = now;
-    DelayMs(25);   // debounces switch
-  }
+void Heartbeat(void)
+{
+	GPIO_PORTF_DATA_R ^= 0x02;
 }
-
 
 
 int main(void){       
   DisableInterrupts();
-  TExaS_Init(SIMULATIONGRADER);    // bus clock at 80 MHz
+  TExaS_Init(SCOPE);    // bus clock at 80 MHz
   Key_Init();
   LaunchPad_Init();
   Sound_Init();
   Music_Init();
   EnableInterrupts();
-
   while(1){                
-
+    Heartbeat();
 		int key = Key_In();	// This gives us which key has been pressed - our index for which frequency to use
 		
 		if(key == 0x01){
 			Sound_Start(4509);	
 		}
-		else if(key == 0x02){
-			Sound_Start(3600);	
+		if(key == 0x02){
+			Sound_Start(3579);	
 		}
-		else if(key == 0x04){
+		if(key == 0x04){
 			Sound_Start(3009);	
 		}
-		else if(key == 0x08){
-			Sound_Start(2660);	
+		if(key == 0x08){
+			Sound_Start(2681);	
 		}
-		else if(key == 0x00){
-			Sound_Off();
+		else{
+			Sound_Start(0);
 		}
 		
   }             

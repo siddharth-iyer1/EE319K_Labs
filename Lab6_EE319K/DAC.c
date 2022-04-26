@@ -23,7 +23,7 @@
 void DAC_Init(void){
 	uint32_t time = 0x6665;
 
-	SYSCTL_RCGCGPIO_R |= 0x02;	
+	SYSCTL_RCGCGPIO_R |= 0x10;		
 	SYSCTL_RCGCGPIO_R |= 0x20;		// Enables clock for port F - heartbeat
 	while(time){
 		time --; 
@@ -32,6 +32,7 @@ void DAC_Init(void){
 	GPIO_PORTB_DIR_R |=  0x3F;
 	GPIO_PORTB_DEN_R |=  0x3F;
 	GPIO_PORTB_DR8R_R |= 0x3F;
+	
 	GPIO_PORTF_DIR_R |= 0x0E;
 	GPIO_PORTF_DEN_R |= 0x0E;
 }

@@ -8,11 +8,11 @@ I (UART.h)(0x6169F8DE)
 I (Timer3A.h)(0x61487B6E)
 I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
 I (Lab6Grader.h)(0x61DDB43C)
-F (.\Sound.c)(0x623D1FEE)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\sound.o --omf_browse .\sound.crf --depend .\sound.d)
+F (.\Sound.c)(0x623BB2E8)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\sound.o --omf_browse .\sound.crf --depend .\sound.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
 I (dac.h)(0x61697CA2)
 I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
-F (.\Key.c)(0x623C2208)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\key.o --omf_browse .\key.crf --depend .\key.d)
+F (.\Key.c)(0x623BAD96)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\key.o --omf_browse .\key.crf --depend .\key.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
 I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
 F (.\Music.c)(0x61DDCFF2)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\music.o --omf_browse .\music.crf --depend .\music.d)
@@ -20,10 +20,10 @@ I (Sound.h)(0x616A442E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
 I (DAC.h)(0x61697CA2)
 I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
-F (.\DAC.c)(0x625DBF2C)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\dac.o --omf_browse .\dac.crf --depend .\dac.d)
+F (.\DAC.c)(0x623BADCD)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\dac.o --omf_browse .\dac.crf --depend .\dac.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
 I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
-F (.\Lab6.c)(0x623D1F57)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\lab6.o --omf_browse .\lab6.crf --depend .\lab6.d)
+F (.\Lab6.c)(0x623C05DF)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_Lab6-IC:\Users\kylet\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\kylet\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="536" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\lab6.o --omf_browse .\lab6.crf --depend .\lab6.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025E85E)
 I (../inc/tm4c123gh6pm.h)(0x5388C2DA)
 I (Sound.h)(0x616A442E)

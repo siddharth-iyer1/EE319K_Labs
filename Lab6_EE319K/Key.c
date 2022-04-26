@@ -21,14 +21,13 @@
 void Key_Init(void){ volatile uint32_t delay;
 	uint32_t time = 0x6665;
 
-	SYSCTL_RCGCGPIO_R |= 0x10;
+	SYSCTL_RCGCGPIO_R |= 0x16;
 
 	while(time){
 		time --; 
-	}
-	
+	}				
 	GPIO_PORTE_DIR_R |=  0x00;
-	GPIO_PORTE_DEN_R |=  0x0F;
+	GPIO_PORTE_DEN_R |=  0x07;
 }
 // **************Key_In*********************
 // Input from piano key inputs on PA5-2 or PE3-0
@@ -36,7 +35,7 @@ void Key_Init(void){ volatile uint32_t delay;
 // Output: 0 to 15 depending on keys
 //   0x01 is just Key0, 0x02 is just Key1, 0x04 is just Key2, 0x08 is just Key3
 uint32_t Key_In(void){ 
-	uint32_t data;
+	uint16_t data = 0;
 	data = GPIO_PORTE_DATA_R;
 	return data;
 }
